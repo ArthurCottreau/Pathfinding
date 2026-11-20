@@ -15,6 +15,8 @@ func get_grid() -> Array[PathNode]:
 	return grid_array
 
 func get_path(cell_start: Vector2i, cell_target: Vector2i) -> Array[PathNode]:
+	if not _is_within_grid(cell_target.x + cell_target.y * size.x): return []
+	
 	var start_node: PathNode = grid_array[cell_start.x + cell_start.y * size.x]
 	var end_node: PathNode = grid_array[cell_target.x + cell_target.y * size.x]
 	
@@ -105,6 +107,12 @@ func set_node_is_walkable(pos: Vector2i, is_walk: bool) -> void:
 	var cell_id: int = pos.x + pos.y * size.x
 	if _is_within_grid(cell_id):
 		grid_array[pos.x + pos.y * size.x].is_walkable = is_walk
+
+func get_node_weight(pos: Vector2i) -> int:
+	var cell_id: int = pos.x + pos.y * size.x
+	if _is_within_grid(cell_id):
+		return grid_array[pos.x + pos.y * size.x].weight
+	return 0
 
 func set_node_weight(pos: Vector2i, cost: int) -> void:
 	var cell_id: int = pos.x + pos.y * size.x

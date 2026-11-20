@@ -23,6 +23,9 @@ func initialize_pawns(pawn_grid: Node2D, pawn_type: int) -> void:
 			var child_map_pos: Vector2i = local_to_grid(child.position)
 			set_cell(child_map_pos, child.type)
 			pawn_coords[child_map_pos] = child
+		
+		if child.type == ACTOR:
+			child.curr_cell = local_to_grid(child.position)
 
 func get_custom_cell_data(node_group: StringName, custom_data: String) -> Dictionary[Vector2i,int]:
 	var scene_tree: SceneTree = Engine.get_main_loop()

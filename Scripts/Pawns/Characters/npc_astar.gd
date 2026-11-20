@@ -1,6 +1,7 @@
 extends Character
 
 @export var targets: Array[Vector2i]
+@export var slime: PackedScene
 
 var is_stopped: bool = false
 var path: Array[Vector2i]
@@ -40,7 +41,11 @@ func wait() -> void:
 	await get_tree().create_timer(1.0).timeout
 	is_stopped = false
 
-func trigger_event(direction: Vector2i) -> void:
+func _move_tween_done() -> void:
+	var new_slime: Pawn = slime.instantiate()
+	Grid.add_event(new_slime, curr_cell)
+	super()
+
+func trigger_event() -> void:
 	if not is_moving:
-		chara_skin.set_animation_direction(-direction) # Face player
 		print("NPC AStar")

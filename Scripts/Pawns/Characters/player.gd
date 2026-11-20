@@ -1,5 +1,7 @@
 extends Character
 
+signal on_death
+
 const MOVEMENTS: Dictionary[StringName, Vector2i] = {
 	&"ui_up": Vector2i.UP,
 	&"ui_left": Vector2i.LEFT,
@@ -9,6 +11,9 @@ const MOVEMENTS: Dictionary[StringName, Vector2i] = {
 
 var input_history: Array[StringName] = []
 var cur_direction: Vector2i = Vector2i.DOWN
+var is_dead: bool = false
+
+@onready var slimed_timer: Timer = $SlimedTimer
 
 func _input(event: InputEvent) -> void:
 	for direction in MOVEMENTS.keys():
@@ -21,9 +26,7 @@ func _input(event: InputEvent) -> void:
 
 func _process(_delta) -> void:
 	if not can_move(): return
-	
-	if Input.is_action_just_pressed(&"ui_accept"):
-		Grid.request_actor(self, cur_direction) # To Request dialogue
+	if is_dead: return
 	
 	var input_direction: Vector2i = set_direction()
 	if input_direction:
@@ -65,3 +68,14 @@ func _move_tween_done() -> void:
 func set_talking(talk_state: bool) -> void:
 	is_talking = talk_state
 	if is_talking: input_history.clear()
+
+func trigger_event() -> void:
+	is_dead = true
+	on_death.emit()
+
+func slimed() -> void:
+	actual_speed = 0.8
+	slimed_timer.start()
+
+func unslime() -> void:
+	actual_speed = speed

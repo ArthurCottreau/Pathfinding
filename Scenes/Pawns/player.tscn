@@ -30,3 +30,9 @@ parameters/StateMachine/Idle/blend_position = Vector2(0, 1)
 parameters/StateMachine/Walk0/blend_position = Vector2(0, 1)
 parameters/StateMachine/Walk1/blend_position = Vector2(0, 1)
 parameters/TimeScale/scale = 1.0
+
+[node name="SlimedTimer" type="Timer" parent="." unique_id=655561359]
+wait_time = 5.0
+one_shot = true
+
+[connection signal="timeout" from="SlimedTimer" to="." method="unslime"]

@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://cwn1w0fftpoke"]
+
+[ext_resource type="Script" uid="uid://xomynkd34bug" path="res://Scripts/Pawns/Types/event.gd" id="1_sm86d"]
+[ext_resource type="Texture2D" uid="uid://qykpujgq80e3" path="res://icon.png" id="2_bg4st"]
+
+[node name="Slime" type="Node2D" unique_id=288021471]
+script = ExtResource("1_sm86d")
+type = 2
+
+[node name="Icon" type="Sprite2D" parent="." unique_id=1392743685]
+position = Vector2(8, 8)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("2_bg4st")
+
+[node name="Timer" type="Timer" parent="." unique_id=299216010]
+wait_time = 5.0
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

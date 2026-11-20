@@ -25,6 +25,7 @@ func request_move(pawn: Pawn, direction: Vector2i) -> Vector2i:
 	match cell.target_type:
 		EMPTY:
 			update_pawn_pos(pawn.type, cell.start, cell.target)
+			pawn.curr_cell = cell.target
 			return grid_to_local(cell.target)
 		_:
 			return Vector2i.ZERO
@@ -39,12 +40,17 @@ func node_todir_path(path_nodes: Array[PathNode]) -> Array[Vector2i]:
 
 func get_move_path(pawn: Pawn, end_cell: Vector2i) -> Array[Vector2i]:
 	_update_astar_grid_pawns()
+	# Will allow to atleast try to get to target, even if it's impossible
+	pathfinding.set_node_is_walkable(end_cell, true)
 	
 	var start_point: Vector2i = local_to_grid(pawn.position)
 	
 	var path: Array[PathNode] = pathfinding.get_path(start_point, end_cell)
 	var path_moves: Array[Vector2i] = node_todir_path(path)
 	return path_moves
+
+func get_cell_weight(cell_target: Vector2i) -> int:
+	return pathfinding.get_node_weight(cell_target)
 
 func set_cell_weight(cell_target: Vector2i, weight: int) -> void:
 	pathfinding.set_node_weight(cell_target, weight)
@@ -63,4 +69,4 @@ func request_event(pawn: Pawn, direction: Vector2i) -> void:
 	
 	if cell.target_type == ACTOR:
 		var event_pawn: Pawn = get_cell_pawn(cell.target)
-		if event_pawn: event_pawn.trigger_event(direction)
+		if event_pawn: event_pawn.trigger_event()
